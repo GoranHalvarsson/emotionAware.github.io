@@ -26,9 +26,8 @@ Habitat.EmotionAware = {
                     localMediaStream = null,
                     snap = false;
 
-				
 					
-        var mediaConstraints = { audio: false, video: { width: 400, height: 320 } }
+        var mediaConstraints = { audio: false, video: { width: 400, height: 320 } };
 
         navigator.mediaDevices.getUserMedia(mediaConstraints).then(successCallback).catch(errorCallback);
 		
@@ -37,7 +36,7 @@ Habitat.EmotionAware = {
 
 		video.setAttribute('autoplay', true);	
 		
-		jQuery(canvas).appendTo("#feed");	
+		//jQuery(canvas).appendTo("#feed");		
         
 
         function successCallback(stream) {
