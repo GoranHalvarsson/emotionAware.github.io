@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<head>
+<meta charset="UTF-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <title>Face detection</title>
+</head>
+<body>
+   
+
+ <div id="videoTest" style="width: 25%; margin: 0px auto;">
+	<h2>Video feed</h2>
+	<div id="feed" width="400" height="320"></div><br/>
+	<h2>Snap Shot</h2>	
+	<img id="screenshot" src="data:," height="320" width="400"><br/>
+	
+	<textarea  style="width:400" id="stringBase" rows="4" cols="50"></textarea>
+</div>
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="js/CcvImageProcessor.js"></script>
+<script src="js/FaceDetector.js"></script>
+<script src="js/adapter.js"></script>
+<script src="js/EmotionAware.js"></script>
+</body>
+</html>
