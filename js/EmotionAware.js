@@ -36,7 +36,7 @@ Habitat.EmotionAware = {
 
 		video.setAttribute('autoplay', true);	
 		
-		//jQuery(canvas).appendTo("#feed");		
+		jQuery(canvas).appendTo("#feed");		
         
 
         function successCallback(stream) {
