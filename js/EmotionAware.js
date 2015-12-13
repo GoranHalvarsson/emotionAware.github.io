@@ -68,7 +68,7 @@ Habitat.EmotionAware = {
                 if (face.height <= 35)
                     continue;
 
-                if (localMediaStream) {
+                if (localMediaStreamTrack) {
 					
 		    callback(canvas.toDataURL('image/jpeg', 0.5));
                     return true;
