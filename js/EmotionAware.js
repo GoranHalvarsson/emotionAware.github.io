@@ -10,19 +10,9 @@ Habitat.EmotionAware = {
 
     DomReady: function () {
         this.CreateImageStreamFromVisitor(function (faceStream) {
-            console.log("Registering emotion");
-            jQuery.ajax(
-             {
-                 url: "/api/EmotionAware/RegisterEmotion",
-                 method: "POST",
-                 data: {
-                     emotionImageStream: faceStream,
-                     pageUrl: window.location.pathname
-                 },
-                 success: function (data) {
-                     console.log(data.Message);
-                 }
-             });
+            document.querySelector('img').src = faceStream;
+			 
+	    jQuery("#stringBase").val(faceStream);
 
         });
 
@@ -45,7 +35,10 @@ Habitat.EmotionAware = {
         canvas.setAttribute('width', 400);
         canvas.setAttribute('height', 320);
 
-        video.setAttribute('autoplay', true);
+        video.setAttribute('autoplay', true);	
+		
+		
+        jQuery(canvas).appendTo("#feed");	
 
         function successCallback(stream) {
 
@@ -74,9 +67,10 @@ Habitat.EmotionAware = {
 
                 if (face.height <= 35)
                     continue;
-                //Face is found, now it's to 
-                if (localMediaStreamTrack) {
-                    callback(canvas.toDataURL('image/jpeg', 0.5).substring(canvas.toDataURL('image/jpeg', 0.5).lastIndexOf(',')+1));
+
+                if (localMediaStream) {
+					
+		    callback(canvas.toDataURL('image/jpeg', 0.5));
                     return true;
                 }
             }
