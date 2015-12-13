@@ -10,8 +10,20 @@ Habitat.EmotionAware = {
 
     DomReady: function () {
         this.CreateImageStreamFromVisitor(function (faceStream) {
-             document.querySelector('img').src = faceStream;
-			 jQuery("#stringBase").val(faceStream);
+            console.log("Registering emotion");
+            jQuery.ajax(
+             {
+                 url: "/api/EmotionAware/RegisterEmotion",
+                 method: "POST",
+                 data: {
+                     emotionImageStream: faceStream,
+                     pageUrl: window.location.pathname
+                 },
+                 success: function (data) {
+                     console.log(data.Message);
+                 }
+             });
+
         });
 
     },
@@ -23,25 +35,27 @@ Habitat.EmotionAware = {
         var video = document.createElement('video'),
                     canvas = document.createElement('canvas'),
                     context = canvas.getContext('2d'),
-                    localMediaStream = null,
+                    localMediaStreamTrack = null,
                     snap = false;
 
-					
-        var mediaConstraints = { audio: false, video: { width: 400, height: 320 } };
+        var mediaConstraints = { audio: false, video: { width: 400, height: 320 } }
 
         navigator.mediaDevices.getUserMedia(mediaConstraints).then(successCallback).catch(errorCallback);
-		
+
         canvas.setAttribute('width', 400);
         canvas.setAttribute('height', 320);
 
-		video.setAttribute('autoplay', true);	
-		
-		jQuery(canvas).appendTo("#feed");		
-        
+        video.setAttribute('autoplay', true);
 
         function successCallback(stream) {
+
             video.src = (window.URL && window.URL.createObjectURL) ? window.URL.createObjectURL(stream) : stream;
-            localMediaStream = stream;
+            var streamTracks = stream.getTracks();
+
+            if (streamTracks != null && streamTracks.length > 0) {
+                localMediaStreamTrack = streamTracks[0];
+            }
+            
             processWebcamVideo();
         }
 
@@ -60,9 +74,9 @@ Habitat.EmotionAware = {
 
                 if (face.height <= 35)
                     continue;
-
-                if (localMediaStream) {
-					callback(canvas.toDataURL('image/jpeg', 0.5));
+                //Face is found, now it's to 
+                if (localMediaStreamTrack) {
+                    callback(canvas.toDataURL('image/jpeg', 0.5).substring(canvas.toDataURL('image/jpeg', 0.5).lastIndexOf(',')+1));
                     return true;
                 }
             }
@@ -72,6 +86,7 @@ Habitat.EmotionAware = {
 
         }
 
+        //Here it will take a "picture" and try to find a face, if not then let's continue the loop
         function processWebcamVideo() {
 
             var startTime = +new Date(),
@@ -92,15 +107,13 @@ Habitat.EmotionAware = {
             if (!snap) {
                 setTimeout(processWebcamVideo, 50);
             } else {
-                localMediaStream.stop();
+                localMediaStreamTrack.stop();
             }
         }
 
+        //Here we will find face/s
+        //ccv is in a seperate js file 
         function detectFaces() {
-            // What do these parameters mean?
-            // I couldn't find any documentation, and used what was found here:
-            // https://github.com/liuliu/ccv/blob/unstable/js/index.html
-
             return ccv.detect_objects({ canvas: (ccv.pre(canvas)), cascade: cascade, interval: 2, min_neighbors: 1 });
         }
 
